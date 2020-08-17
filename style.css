@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 body {
     background-color: #13141b;
     color: #ffffff;
@@ -5,6 +6,7 @@ body {
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: top;
+    font-family: 'Poppins', sans-serif;
 }
 
 .form-control {
@@ -44,8 +46,18 @@ body {
     border-radius: 15px;
 }
 
-img {
+.single-result h3 {
+    font-size: 1.3rem;
+}
+
+.single-result p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.single-result img {
     object-fit: cover;
     height: 70px;
     width: 70px;
+    border-radius: 50%;
 }
