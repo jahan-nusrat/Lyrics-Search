@@ -5,6 +5,7 @@ const nxtPrev = document.querySelector('.next-prev')
 const url = 'https://api.lyrics.ovh';
 
 async function fetchData(name) {
+    searchResult.innerHTML = '<p class="text-center" style="font-size:2rem">Loading...</p>'
     let response = await fetch(`${url}/suggest/${name}`);
     let data = await response.json()
     updateUI(data)
@@ -28,15 +29,32 @@ function updateUI(data) {
         `;
         }
     });
+    title.innerHTML = 'Song title';
+    lyrics.innerHTML = '';
 }
 const lyrics = document.querySelector('.lyric')
 const title = document.querySelector('.single-lyrics h2')
 
-async function fetchLyrics(artist, song) {
-    let response = await fetch(`${url}/v1/${artist}/${song}`);
-    let data = await response.json()
+function displayLyrics(data) {
     let lyric = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>')
     lyrics.innerHTML = lyric;
+}
+
+function errorHandle() {
+    lyrics.innerHTML = 'Lyrics is missing.Try another song'
+}
+
+function fetchLyrics(artist, song) {
+    lyrics.innerHTML = 'Loading...'
+    fetch(`${url}/v1/${artist}/${song}`)
+        .then(res => res.json())
+        .then(data => {
+            displayLyrics(data)
+        })
+        .catch(err => {
+            console.log('not found');
+            errorHandle()
+        })
     title.innerHTML = `<strong>${artist}</strong> - ${song}`
 }
 
