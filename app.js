@@ -20,9 +20,13 @@ function updateUI(data) {
             searchResult.innerHTML +=
                 `
         <div class="single-result row align-items-center my-3 p-3">
-            <div class="col-md-9">
+            <div class="col-md-9 d-flex align-items-center">
+            <img src="${item.album.cover_medium}">
+                <div class="ml-3">
                 <h3 class="lyrics-name">${item.title}</h3>
                 <p class="author lead">Album by <span>${item.artist.name}</span></p>
+                </div>
+                
             </div>
             <div class="col-md-3 text-md-right text-center">
                 <button class="btn btn-success" data-artist="${item.artist.name}" data-title="${item.title}">Get Lyrics</button>
@@ -44,7 +48,9 @@ function errorHandle() {
     lyrics.innerHTML = 'Lyrics is missing.Try another song'
 }
 
-function fetchLyrics(artist, song) {
+const albumImg = document.querySelector('.song-img')
+
+function fetchLyrics(artist, song, album) {
     lyrics.innerHTML = '<p class="text-center" style="font-size:2rem">Loading...</p>'
     fetch(`${url}/v1/${artist}/${song}`)
         .then(res => res.json())
@@ -52,10 +58,10 @@ function fetchLyrics(artist, song) {
             displayLyrics(data)
         })
         .catch(err => {
-            console.log('not found');
+            console.log(err);
             errorHandle()
         })
-    title.innerHTML = `<strong>${artist}</strong> - ${song}`
+    title.innerHTML = `<strong>${artist}</strong> - ${song}`;
 }
 
 searchResult.addEventListener('click', function (event) {
@@ -67,19 +73,19 @@ searchResult.addEventListener('click', function (event) {
     }
 })
 
-if (searchBtn) {
-    searchBtn.addEventListener('click', () => {
-        lyrics.innerHTML = '';
-        title.innerHTML = 'Song title'
-        let searchSong = input.value.trim();
-        if (!searchSong) {
-            alert('Enter Your Song Name')
-        } else {
-            fetchData(searchSong)
-        }
-        input.focus()
-    })
-}
+
+searchBtn.addEventListener('click', () => {
+    lyrics.innerHTML = '';
+    title.innerHTML = 'Song title'
+    let searchSong = input.value.trim();
+    if (!searchSong) {
+        alert('Enter Your Song Name')
+    } else {
+        fetchData(searchSong)
+    }
+    input.focus()
+})
+
 
 
 
