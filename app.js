@@ -1,7 +1,9 @@
-const searchBtn = document.querySelector('.search-btn')
-const input = document.querySelector('input')
-const searchResult = document.querySelector('.search-result')
-const nxtPrev = document.querySelector('.next-prev')
+const searchBtn = document.querySelector('.search-btn');
+const input = document.querySelector('input');
+const searchResult = document.querySelector('.search-result');
+const nxtPrev = document.querySelector('.next-prev');
+const lyrics = document.querySelector('.lyric');
+const title = document.querySelector('.single-lyrics h2');
 const url = 'https://api.lyrics.ovh';
 
 async function fetchData(name) {
@@ -29,11 +31,9 @@ function updateUI(data) {
         `;
         }
     });
-    title.innerHTML = 'Song title';
+    //title.innerHTML = 'Song title';
     lyrics.innerHTML = '';
 }
-const lyrics = document.querySelector('.lyric')
-const title = document.querySelector('.single-lyrics h2')
 
 function displayLyrics(data) {
     let lyric = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>')
@@ -45,7 +45,7 @@ function errorHandle() {
 }
 
 function fetchLyrics(artist, song) {
-    lyrics.innerHTML = 'Loading...'
+    lyrics.innerHTML = '<p class="text-center" style="font-size:2rem">Loading...</p>'
     fetch(`${url}/v1/${artist}/${song}`)
         .then(res => res.json())
         .then(data => {
@@ -67,15 +67,20 @@ searchResult.addEventListener('click', function (event) {
     }
 })
 
-searchBtn.addEventListener('click', () => {
-    let searchSong = input.value.trim();
-    if (!searchSong) {
-        alert('Enter Your Song Name')
-    } else {
-        fetchData(searchSong)
-    }
-    input.focus()
-})
+if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
+        lyrics.innerHTML = '';
+        title.innerHTML = 'Song title'
+        let searchSong = input.value.trim();
+        if (!searchSong) {
+            alert('Enter Your Song Name')
+        } else {
+            fetchData(searchSong)
+        }
+        input.focus()
+    })
+}
+
 
 
 fetch('https://api.lyrics.ovh/suggest/one')
