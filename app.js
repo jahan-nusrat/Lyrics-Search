@@ -93,3 +93,8 @@ searchResult.addEventListener('click', function (event) {
         fetchLyrics(artistName, songTitle, idxNo);
     }
 });
+
+/* focus input field on window load */
+window.addEventListener('load', () => {
+    input.focus()
+})
