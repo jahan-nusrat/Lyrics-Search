@@ -3,7 +3,6 @@ const input = document.querySelector('input')
 const searchResult = document.querySelector('.search-result')
 const nxtPrev = document.querySelector('.next-prev')
 const url = 'https://api.lyrics.ovh';
-let nxtUrl = 'http://api.deezer.com/search?limit=15&q=one&index=15'
 
 async function fetchData(name) {
     let response = await fetch(`${url}/suggest/${name}`);
@@ -12,6 +11,7 @@ async function fetchData(name) {
 }
 
 function updateUI(data) {
+    searchResult.innerHTML = '';
     data.data.forEach((item, idx) => {
         if (idx < 10) {
             searchResult.innerHTML +=
@@ -29,6 +29,25 @@ function updateUI(data) {
         }
     });
 }
+const lyrics = document.querySelector('.lyric')
+const title = document.querySelector('.single-lyrics h2')
+
+async function fetchLyrics(artist, song) {
+    let response = await fetch(`${url}/v1/${artist}/${song}`);
+    let data = await response.json()
+    let lyric = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>')
+    lyrics.innerHTML = lyric;
+    title.innerHTML = `<strong>${artist}</strong> - ${song}`
+}
+
+searchResult.addEventListener('click', function (event) {
+    const clickItem = event.target;
+    if (clickItem.tagName === "BUTTON") {
+        const artistName = clickItem.getAttribute('data-artist')
+        const songTitle = clickItem.getAttribute('data-title')
+        fetchLyrics(artistName, songTitle)
+    }
+})
 
 searchBtn.addEventListener('click', () => {
     let searchSong = input.value.trim();
@@ -37,7 +56,9 @@ searchBtn.addEventListener('click', () => {
     } else {
         fetchData(searchSong)
     }
+    input.focus()
 })
+
 
 fetch('https://api.lyrics.ovh/suggest/one')
     .then(res => {
